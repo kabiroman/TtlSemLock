@@ -1,6 +1,6 @@
 # 🛡️ TtlSemLock v0.7.2 - Memory Protection Framework
 
-**Release Date**: December 20, 2024  
+**Release Date**: June 21, 2025  
 **Focus**: Enterprise-grade memory protection and resource management
 
 **[⬇️ Download from Releases](https://github.com/kabiroman/TtlSemLock/releases/latest)**
