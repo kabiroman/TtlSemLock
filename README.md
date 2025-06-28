@@ -4,6 +4,7 @@
 **Release Type:** Infrastructure & CI/CD Enhancement  
 **Branch:** main  
 **Commit:** f30c540
+
 **[⬇️ Download from Releases](https://github.com/kabiroman/TtlSemLock/releases/latest)**
 
 ## 🎯 Overview
