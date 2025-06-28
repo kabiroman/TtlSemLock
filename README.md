@@ -1,410 +1,265 @@
-# 🛡️ TtlSemLock v0.7.2 - Memory Protection Framework
+# TtlSemLock v0.7.6 Release Notes
 
-**Release Date**: June 21, 2025  
-**Focus**: Enterprise-grade memory protection and resource management
-
+**Release Date:** June 28, 2025  
+**Release Type:** Infrastructure & CI/CD Enhancement  
+**Branch:** main  
+**Commit:** f30c540
 **[⬇️ Download from Releases](https://github.com/kabiroman/TtlSemLock/releases/latest)**
 
-## 🎯 **What TtlSemLock v0.7.2 can do:**
+## 🎯 Overview
 
-**BEFORE v0.7.2**: Users could create unlimited semaphores → **OOM Risk** 🚨  
-**NOW v0.7.2**: Comprehensive memory protection with configurable limits ✅
+TtlSemLock v0.7.6 represents a **major infrastructure milestone**, building upon the enterprise-grade features delivered in v0.7.5. While v0.7.5 introduced the **Graceful Release Framework** with advanced retry logic, v0.7.6 focuses on making these powerful features accessible to the broader community through **Docker Hub integration** and **streamlined deployment**.
 
-### **🛡️ Complete Memory Protection**
-- **Max Locks Limit**: Configure maximum active semaphores (default: 100,000)
-- **Memory Limit**: Set maximum memory usage in MB (default: 512MB)  
-- **Warning System**: Alerts at 80% resource usage
-- **Request Rejection**: Automatic rejection when limits reached
-- **Zero Performance Impact**: <0.1% overhead for protection checks
+## 🚀 What's New in v0.7.6
 
-### **📊 Advanced Monitoring**
-- **5 New Prometheus Metrics**: Complete memory usage tracking
-- **Real-time Alerts**: Structured logging for warnings and rejections
-- **Production Dashboard**: Grafana-ready metrics for enterprise monitoring
+### 🐳 Docker Hub Integration (Community Access)
+- **NEW:** Official Docker Hub repository: [`kabiromandocker/ttlsemlock`](https://hub.docker.com/r/kabiromandocker/ttlsemlock)
+- **NEW:** One-command deployment: `docker run kabiromandocker/ttlsemlock:latest`
+- **NEW:** Multi-registry support (Docker Hub + GitHub Container Registry)
+- **NEW:** Separate debug images: `kabiromandocker/ttlsemlock-debug`
 
-### **🔧 Flexible Configuration**
+### 🔧 DevOps & Infrastructure Enhancements
+- **IMPROVED:** GitLab CI/CD pipeline with Docker Hub integration
+- **IMPROVED:** Robust GitHub release handling (handles existing releases)
+- **IMPROVED:** Enhanced artifact publishing workflow
+- **IMPROVED:** Better error handling and retry logic in CI/CD
+
+### 📦 Distribution & Accessibility
+- **UPDATED:** `docker-compose.yml` to use Docker Hub images by default
+- **UPDATED:** Multi-registry authentication in CI/CD
+- **UPDATED:** Improved Docker image naming conventions
+- **UPDATED:** Enhanced caching strategies for faster builds
+
+## 🎉 Major Features Since v0.7.5
+
+### ✨ Advanced Retry Logic Framework (v0.7.4-v0.7.5)
+**Enterprise-grade reliability for production environments**
+
+- **🔄 Exponential Backoff + Jitter:** Intelligent retry timing to prevent thundering herd
+- **⚙️ Configurable Parameters:** Global and per-lock retry settings
+- **🛡️ Split-Brain Prevention:** Advanced conflict resolution mechanisms
+- **📊 Retry Metrics:** Comprehensive monitoring of retry attempts and outcomes
+
 ```json
 {
-  "limits": {
-    "max_locks": 100000,        // Prevent unlimited semaphores
-    "max_memory_mb": 512,       // Prevent OOM scenarios  
-    "warn_threshold": 0.8,      // Early warning system
-    "reject_requests": true     // Hard protection enabled
+  "retry": {
+    "enabled": true,
+    "max_attempts": 5,
+    "initial_delay_ms": 100,
+    "max_delay_ms": 5000,
+    "backoff_multiplier": 2.0,
+    "jitter_enabled": true
   }
 }
 ```
 
-### **🧪 Battle-Tested**
-- **5 Comprehensive Tests**: All memory protection scenarios covered
-- **Production Documentation**: Complete Memory Protection Guide
-- **Zero Regressions**: All existing functionality preserved
+### 🛡️ Graceful Release Framework (v0.7.5)
+**Resource leak prevention with RAII pattern**
 
----
+- **🔒 Multiple Lock Acquisition:** Safe handling of multiple semaphores
+- **🧹 Automatic Cleanup:** RAII pattern ensures no resource leaks
+- **⚡ Exception Safety:** Guaranteed cleanup even during failures
+- **🔍 Resource Tracking:** Complete visibility into lock ownership
 
-## 📦 **Download TtlSemLock v0.7.2**
-
-### **Pre-compiled Binaries** (Recommended)
-
-| Platform | Architecture | Download |
-|----------|-------------|----------|
-| **Linux** | AMD64 | [ttl-semlock-linux-amd64](https://github.com/kabiroman/TtlSemLock/releases/download/v0.7.2/ttl-semlock-linux-amd64) |
-| **Linux** | ARM64 | [ttl-semlock-linux-arm64](https://github.com/kabiroman/TtlSemLock/releases/download/v0.7.2/ttl-semlock-linux-arm64) |
-| **macOS** | AMD64 | [ttl-semlock-darwin-amd64](https://github.com/kabiroman/TtlSemLock/releases/download/v0.7.2/ttl-semlock-darwin-amd64) |
-| **macOS** | ARM64 | [ttl-semlock-darwin-arm64](https://github.com/kabiroman/TtlSemLock/releases/download/v0.7.2/ttl-semlock-darwin-arm64) |
-| **Windows** | AMD64 | [ttl-semlock-windows-amd64.exe](https://github.com/kabiroman/TtlSemLock/releases/download/v0.7.2/ttl-semlock-windows-amd64.exe) |
-
-### **Quick Start**
-
-```bash
-# Linux AMD64 (most common)
-wget https://github.com/kabiroman/TtlSemLock/releases/download/v0.7.2/ttl-semlock-linux-amd64
-chmod +x ttl-semlock-linux-amd64
-./ttl-semlock-linux-amd64
-
-# With memory protection configured
-./ttl-semlock-linux-amd64 --config config.json
-```
-
-### **Docker Images**
-
-```bash
-# Production (Alpine-based, ~15MB) - with memory protection
-docker run -p 8765:8765 -p 9765:9765 ghcr.io/kabiroman/ttlsemlock:v0.7.2
-
-# With custom memory limits
-docker run -p 8765:8765 -p 9765:9765 \
-  -v $(pwd)/config.json:/app/config.json \
-  ghcr.io/kabiroman/ttlsemlock:v0.7.2 --config /app/config.json
-```
-
-### **Source Code**
-- **Source Archive**: `ttl-semlock-v0.7.2.tar.gz`
-- **Protocol Docs**: `ttl-semlock-protocol-v0.7.2.tar.gz`
-
----
-
-## 🎉 **What's New in v0.7.2:**
-
-### **🛡️ Memory Protection Framework**
-
-#### **1. Configurable Memory Limits**
-```json
-{
-  "limits": {
-    "max_locks": 100000,        // Maximum active semaphores
-    "max_memory_mb": 512,       // Memory limit in MB
-    "warn_threshold": 0.8,      // Warning at 80% usage
-    "reject_requests": true     // Reject when limit reached
-  }
+```php
+// PHP Client Example
+$lockCollection = new LockCollection($client);
+try {
+    $lockCollection->acquire(['resource1', 'resource2'], 30);
+    // Your critical section here
+} finally {
+    $lockCollection->releaseAll(); // Automatic cleanup guaranteed
 }
 ```
 
-**Benefits:**
-- ✅ **Prevents OOM**: No more server crashes from unlimited semaphores
-- ✅ **Early Warnings**: Get alerts before hitting limits
-- ✅ **Graceful Degradation**: Controlled request rejection vs server crash
-- ✅ **Production Ready**: Enterprise-grade resource management
+### 📊 Advanced Observability (v0.7.1-v0.7.2)
+**Complete monitoring and memory protection**
 
-#### **2. Request Rejection System**
+- **📈 15+ Prometheus Metrics:** Full observability stack
+- **🏥 Multi-port Architecture:** TCP:8765 + HTTP:9765 + Debug:9766
+- **🧠 Memory Protection:** Configurable limits (100K locks, 512MB memory)
+- **⚠️ Warning System:** Proactive alerts at 80% resource usage
+
+## 📦 Distribution Channels
+
+### Docker Images
 ```bash
-# When limits are reached:
-curl -X POST localhost:8765 -d '{"action":"acquire","key":"test","ttl":300}'
+# Production image (Docker Hub)
+docker pull kabiromandocker/ttlsemlock:v0.7.6
+docker pull kabiromandocker/ttlsemlock:latest
 
-# Response:
-{
-  "success": false,
-  "error": "maximum locks limit reached: 100000/100000"
-}
+# Debug image (with debugging tools)
+docker pull kabiromandocker/ttlsemlock-debug:v0.7.6
+docker pull kabiromandocker/ttlsemlock-debug:latest
+
+# GitHub Container Registry (alternative)
+docker pull ghcr.io/kabiroman/ttlsemlock:v0.7.6
+docker pull ghcr.io/kabiroman/ttlsemlock:latest
 ```
 
-#### **3. Warning System**
-```json
-{
-  "timestamp": "2024-12-20T15:30:45Z",
-  "level": "warn", 
-  "message": "Lock count warning: 85.2% of limit (85234/100000)"
-}
-```
-
-### **📊 New Prometheus Metrics**
-
-#### **Memory Protection Metrics**
-```prometheus
-# Current memory usage
-ttl_semlock_memory_usage_mb
-
-# Configured memory limit  
-ttl_semlock_memory_limit_mb
-
-# Configured locks limit
-ttl_semlock_locks_limit
-
-# Rejected requests by reason
-ttl_semlock_rejected_requests_total{reason="max_locks_reached"}
-ttl_semlock_rejected_requests_total{reason="memory_limit_reached"}
-```
-
-#### **Grafana Dashboard Ready**
+### 🚀 Quick Start (Now Easier Than Ever!)
 ```bash
-# Check memory usage
-curl http://localhost:9765/metrics | grep memory
+# 1. One-command deployment with Docker Hub
+docker run -p 8765:8765 -p 9765:9765 kabiromandocker/ttlsemlock:latest
 
-# Monitor rejected requests
-curl http://localhost:9765/metrics | grep rejected_requests
+# 2. Production setup with monitoring
+curl -O https://raw.githubusercontent.com/kabiroman/TtlSemLock/main/docker-compose.yml
+docker-compose up -d
+
+# 3. Test the advanced retry logic
+curl -X POST http://localhost:9765/lock \
+  -H "Content-Type: application/json" \
+  -d '{"resource":"test","ttl":30,"retry":{"max_attempts":5}}'
+
+# 4. Monitor with Prometheus metrics
+curl http://localhost:9765/metrics | grep ttl_semlock
 ```
 
-### **🧪 Comprehensive Testing**
+### 💡 What You Get Out of the Box
+- **🔄 Advanced Retry Logic:** Exponential backoff with jitter for enterprise reliability
+- **🛡️ Resource Protection:** Memory limits and graceful cleanup prevent system overload  
+- **📊 Full Observability:** 15+ Prometheus metrics for production monitoring
+- **🐳 Easy Deployment:** One Docker command gets you production-ready semaphores
 
-#### **5 New Test Scenarios**
-1. **MaxLocks Test**: Validates lock count limits
-2. **MemoryUsage Test**: Monitors actual memory consumption  
-3. **WarnThreshold Test**: Verifies warning system
-4. **MetricsIntegration Test**: Ensures metrics accuracy
-5. **RejectRequests Test**: Confirms request rejection
+## 🔧 Technical Changes
 
-```bash
-# Run memory protection tests
-go test -v -run "TestMemoryLimits" -timeout 30s
+### Docker & Container Improvements
+- **Enhanced:** Multi-platform Docker builds (linux/amd64, linux/arm64)
+- **Enhanced:** Docker layer caching for faster CI/CD builds
+- **Enhanced:** Improved container security and optimization
+- **Enhanced:** Better health checks and monitoring integration
 
-# Results:
-# ✅ Max locks limit working correctly
-# ✅ Memory monitoring working correctly  
-# ✅ Warning threshold reached
-# ✅ Metrics integration working correctly
-# ✅ Request rejection working correctly
-```
+### CI/CD Pipeline Architecture
+- **Optimized:** Tag-only release pipeline (no pipeline spam)
+- **Optimized:** Parallel job execution for faster builds
+- **Optimized:** Advanced caching strategies (Go modules, security tools, APK packages)
+- **Optimized:** Artifact management and distribution
 
-### **📚 Production Documentation**
+### Infrastructure as Code
+- **Updated:** Docker Compose configuration for production readiness
+- **Updated:** Prometheus and Grafana integration examples
+- **Updated:** Network and volume management improvements
+- **Updated:** Environment variable handling
 
-#### **Complete Memory Protection Guide**
-- **11 Comprehensive Sections**: Configuration, monitoring, troubleshooting
-- **Production Checklist**: Step-by-step deployment guide
-- **Grafana Alerts**: Ready-to-use alert configurations
-- **Troubleshooting Guide**: Common issues and solutions
+## 🛠️ Development Experience
 
-**Access**: [Memory Protection Guide](docs/MEMORY_PROTECTION_GUIDE.md)
+### For Developers
+- **Simplified:** Local development with Docker Compose
+- **Simplified:** Debug image with pre-installed tools (curl, htop, strace, etc.)
+- **Simplified:** Automated testing and validation pipelines
+- **Simplified:** Multi-platform binary distribution
 
-### **🔧 Flexible Configuration Options**
+### For DevOps Teams
+- **Enhanced:** GitLab CI/CD integration examples
+- **Enhanced:** Multi-registry Docker publishing
+- **Enhanced:** Automated release management
+- **Enhanced:** Infrastructure monitoring setup
 
-#### **Microservice Setup** (Low Load)
-```json
-{
-  "limits": {
-    "max_locks": 10000,
-    "max_memory_mb": 128,
-    "warn_threshold": 0.7,
-    "reject_requests": true
-  }
-}
-```
+## 📊 Performance & Reliability
 
-#### **Enterprise Setup** (High Load)  
-```json
-{
-  "limits": {
-    "max_locks": 500000,
-    "max_memory_mb": 2048,
-    "warn_threshold": 0.85,
-    "reject_requests": true
-  }
-}
-```
+### Build Performance
+- **Faster:** Docker builds with layer caching
+- **Faster:** Go module caching across pipeline runs
+- **Faster:** Parallel job execution in CI/CD
+- **Faster:** Optimized artifact handling
 
-#### **Development Setup** (No Limits)
-```json
-{
-  "limits": {
-    "max_locks": 0,           // 0 = unlimited
-    "max_memory_mb": 0,       // 0 = unlimited
-    "warn_threshold": 0.9,
-    "reject_requests": false  // warnings only
-  }
-}
-```
+### Reliability Improvements
+- **Robust:** Error handling in CI/CD pipelines
+- **Robust:** Retry logic for network operations
+- **Robust:** Better DNS and network configuration
+- **Robust:** Graceful handling of existing releases
 
----
+## 🔒 Security & Compliance
 
-## 🚀 **Performance & Reliability**
+### Container Security
+- **Enhanced:** Multi-stage Docker builds for minimal attack surface
+- **Enhanced:** Non-root user execution in containers
+- **Enhanced:** Security scanning integration (Trivy)
+- **Enhanced:** Vulnerability monitoring and reporting
 
-### **Zero Performance Impact**
-- **Protection Overhead**: <0.1% of total operation time
-- **Memory Checks**: ~50-100 nanoseconds per operation
-- **Sustained Performance**: Still 249K+ req/sec with protection enabled
+### CI/CD Security
+- **Secured:** Masked environment variables for sensitive data
+- **Secured:** Token-based authentication for registries
+- **Secured:** Secure artifact handling and distribution
+- **Secured:** Access control for protected operations
 
-### **Production Proven**
-```bash
-# Benchmark results with memory protection:
-BenchmarkMemoryLimits_Performance-8    2000000    750 ns/op    64 B/op    2 allocs/op
-BenchmarkWithoutLimits-8               2000000    745 ns/op    64 B/op    2 allocs/op
+## 📚 Documentation & Examples
 
-# Difference: Practically negligible
-```
+### Updated Documentation
+- **NEW:** Docker Hub integration guide
+- **NEW:** Multi-registry deployment examples
+- **NEW:** CI/CD pipeline documentation
+- **UPDATED:** Docker Compose examples with monitoring
 
-### **Battle-Tested Scenarios**
-- ✅ **High-Frequency Operations**: 778K ops/sec sustained
-- ✅ **Long-Running Tests**: 30+ second continuous operation
-- ✅ **Memory Leak Prevention**: 0.01MB growth over 10K operations
-- ✅ **Limit Enforcement**: 100% accurate request rejection
-- ✅ **Warning System**: Precise threshold detection
+### Configuration Examples
+- **NEW:** Production-ready Docker Compose setup
+- **NEW:** GitLab CI/CD variable configuration
+- **NEW:** Multi-environment deployment patterns
+- **UPDATED:** Container orchestration examples
 
----
+## 🌐 Community & Ecosystem
 
-## 🛠️ **Migration Guide**
+### Accessibility Improvements
+- **Public:** Docker Hub repository for easy access
+- **Public:** GitHub releases with comprehensive artifacts
+- **Public:** Multi-platform binary distribution
+- **Public:** Community-friendly documentation
 
-### **From v0.7.1 to v0.7.2**
+### Integration Support
+- **Enhanced:** Kubernetes deployment examples
+- **Enhanced:** Docker Swarm compatibility
+- **Enhanced:** Cloud platform integration guides
+- **Enhanced:** Monitoring and observability setup
 
-#### **Automatic Migration**
-- ✅ **Zero Breaking Changes**: All existing functionality preserved
-- ✅ **Backward Compatible**: No configuration changes required
-- ✅ **Default Protection**: Sensible defaults applied automatically
+## 🔄 Migration Guide
 
-#### **Optional Configuration**
-```bash
-# v0.7.1 (still works)
-./ttl-semlock
+### From Previous Versions
+No breaking changes in this release. All existing configurations remain compatible.
 
-# v0.7.2 with protection (recommended)  
-./ttl-semlock --config config.json
-```
+### Docker Image Updates
+If you're using custom Docker configurations, update your image references:
 
-#### **Recommended Production Config**
-```json
-{
-  "server": {
-    "host": "0.0.0.0",
-    "port": 8765,
-    "max_connections": 1000
-  },
-  "limits": {
-    "max_locks": 250000,      // 25% buffer from expected peak
-    "max_memory_mb": 1024,    // Sufficient for 250K locks
-    "warn_threshold": 0.8,    // Early warning
-    "reject_requests": true   // Hard protection
-  },
-  "cleanup": {
-    "interval": "5s"          // Frequent cleanup for memory efficiency
-  }
-}
-```
-
----
-
-## 📊 **Monitoring & Alerting**
-
-### **Essential Metrics to Monitor**
-
-#### **Memory Usage Dashboard**
-```prometheus
-# Memory usage percentage
-(ttl_semlock_memory_usage_mb / ttl_semlock_memory_limit_mb) * 100
-
-# Lock count percentage  
-(ttl_semlock_active_locks / ttl_semlock_locks_limit) * 100
-
-# Request rejection rate
-rate(ttl_semlock_rejected_requests_total[5m])
-```
-
-#### **Grafana Alerts**
 ```yaml
-# High memory usage
-- alert: TtlSemLockHighMemoryUsage
-  expr: (ttl_semlock_memory_usage_mb / ttl_semlock_memory_limit_mb) > 0.8
-  for: 5m
-  labels:
-    severity: warning
+# Old (still works)
+image: ghcr.io/kabiroman/ttlsemlock:latest
 
-# Requests being rejected
-- alert: TtlSemLockRequestsRejected
-  expr: rate(ttl_semlock_rejected_requests_total[5m]) > 0
-  for: 1m
-  labels:
-    severity: critical
+# New (recommended)
+image: kabiromandocker/ttlsemlock:latest
 ```
 
-### **Log Monitoring**
-```bash
-# Monitor warnings and rejections
-tail -f /var/log/ttl-semlock.log | grep -E "(warning|rejected)"
+## 🚨 Known Issues
 
-# Example output:
-# [2024-12-20T15:30:45+03:00] warn: Lock count warning: 85.2% of limit (85234/100000)
-# [2024-12-20T15:31:12+03:00] warn: Acquire rejected due to limits
-```
+- **Minor:** DNS timeout issues in some network configurations (temporary, resolved by retry)
+- **Minor:** Docker Hub rate limiting may affect frequent pulls (use authentication)
 
----
+## 🎯 Why v0.7.6 Matters
 
-## 🎯 **Enterprise Benefits**
+**For End Users:** The enterprise-grade features from v0.7.5 (advanced retry logic, graceful release framework) are now **one Docker command away**. No complex setup, no dependency management - just pull and run.
 
-### **Production Readiness**
-- **🛡️ OOM Protection**: Complete protection from memory exhaustion
-- **📊 Full Observability**: Enterprise-grade monitoring and alerting
-- **🔧 Flexible Configuration**: Adaptable to any environment
-- **📚 Complete Documentation**: Production deployment guides
+**For DevOps Teams:** Production-ready deployment with built-in monitoring, memory protection, and automated retry logic. Everything you need for reliable distributed semaphores in production.
 
-### **Cost Savings**
-- **Reduced Downtime**: Prevent server crashes from resource exhaustion
-- **Predictable Resource Usage**: Know exactly how much memory you'll use
-- **Early Warning System**: Fix issues before they become critical
-- **Automated Protection**: No manual intervention required
+**For Developers:** Rich debugging capabilities with separate debug images, comprehensive metrics, and clear error handling make integration seamless.
 
-### **Compliance Ready**
-- **Resource Governance**: Enforceable resource limits
-- **Audit Trail**: Complete logging of all protection events
-- **SLA Support**: Predictable performance characteristics
-- **Documentation**: Complete operational procedures
+## 🎉 Acknowledgments
+
+This release represents the culmination of months of enterprise-grade feature development (v0.7.1-v0.7.5) now made accessible to the broader community. Special thanks to the feedback that drove both the advanced features and the infrastructure improvements.
+
+## 📞 Support & Feedback
+
+- **🐛 GitHub Issues:** [Report bugs and feature requests](https://github.com/kabiroman/TtlSemLock/issues)
+- **🐳 Docker Hub:** [Official images and documentation](https://hub.docker.com/r/kabiromandocker/ttlsemlock)
+- **📚 Documentation:** [Complete guides and examples](https://github.com/kabiroman/TtlSemLock/tree/main/docs)
+- **📊 Metrics:** Built-in Prometheus endpoint at `:9765/metrics`
 
 ---
 
-## 🔍 **Technical Details**
+## 🔮 What's Next
 
-### **Memory Protection Algorithm**
-1. **Check Limits**: Validate current usage against configured limits
-2. **Early Warning**: Log warnings at threshold percentage
-3. **Request Rejection**: Reject new requests when limits reached
-4. **Metrics Update**: Update Prometheus metrics in real-time
-5. **Graceful Handling**: Return clear error messages to clients
+**v0.7.7 (Next):** Documentation cleanup and structure improvements for better developer experience  
+**v0.8.0 (Major):** Persistence layer and Raft consensus for true distributed semaphores
 
-### **Performance Optimizations**
-- **Cached Memory Checks**: Memory stats cached for efficiency
-- **Atomic Operations**: Lock-free counters for performance
-- **Conditional Checks**: Only check limits when configured
-- **Zero Allocation**: No additional memory allocation for checks
+## 📥 Get Started Today
 
-### **Safety Guarantees**
-- **Division by Zero Protection**: Handle unconfigured limits gracefully
-- **Thread Safety**: All operations are concurrent-safe
-- **Overflow Protection**: Prevent integer overflow in calculations
-- **Error Handling**: Comprehensive error handling and recovery
-
----
-
-## 🎉 **Conclusion**
-
-**TtlSemLock v0.7.2** represents a major step forward in enterprise readiness:
-
-### **Before v0.7.2**
-- ❌ Unlimited semaphore creation → OOM risk
-- ❌ No resource monitoring → Blind operation  
-- ❌ Server crashes → Data loss and downtime
-- ❌ Reactive troubleshooting → Fire fighting
-
-### **After v0.7.2**  
-- ✅ **Configurable limits** → Predictable resource usage
-- ✅ **Real-time monitoring** → Complete visibility
-- ✅ **Graceful degradation** → Controlled behavior under load
-- ✅ **Proactive alerts** → Prevent issues before they occur
-
-### **Enterprise Impact**
-- **🛡️ 100% OOM Protection**: No more memory-related crashes
-- **📊 Complete Visibility**: Know exactly what's happening
-- **⚡ Zero Performance Impact**: Protection without slowdown
-- **🔧 Production Ready**: Deploy with confidence
-
-**TtlSemLock v0.7.2 - Memory protection that just works!** 🚀
-
----
-
-**Download now**: [GitHub Releases](https://github.com/kabiroman/TtlSemLock/releases/v0.7.2)  
-**Documentation**: [Memory Protection Guide](docs/MEMORY_PROTECTION_GUIDE.md)  
-**Support**: [GitHub Issues](https://github.com/kabiroman/TtlSemLock/issues) 
+**🚀 Quick Start:** `docker run -p 8765:8765 -p 9765:9765 kabiromandocker/ttlsemlock:latest`  
+**📦 Download:** [GitHub Releases](https://github.com/kabiroman/TtlSemLock/releases/tag/v0.7.6)  
+**📏 Size:** ~8.5MB (production image) | ~45MB (debug image with tools) 
